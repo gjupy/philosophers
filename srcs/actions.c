@@ -6,7 +6,7 @@
 /*   By: gjupy <gjupy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/29 11:49:40 by gjupy             #+#    #+#             */
-/*   Updated: 2022/08/31 12:20:14 by gjupy            ###   ########.fr       */
+/*   Updated: 2022/10/15 19:20:01 by gjupy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,14 @@ void	philo_sleep(t_philos *philo)
 	print_state(philo);
 	start_time = get_time();
 	while (start_time + philo->info->time_to_sleep > get_time());
-	philo->state = THINKING;
-	if (check_death_state(philo->info) == false)
-		print_state(philo);
+	// if (check_death_state(philo->info) == false)
 }
 
+void	philo_think(t_philos *philo)
+{
+	philo->state = THINKING;
+	print_state(philo);
+}
 void	take_fork(t_philos *philo)
 {
 	pthread_mutex_lock(philo->l_fork);

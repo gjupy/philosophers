@@ -6,7 +6,7 @@
 /*   By: gjupy <gjupy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 16:07:24 by gjupy             #+#    #+#             */
-/*   Updated: 2022/08/31 15:26:42 by gjupy            ###   ########.fr       */
+/*   Updated: 2022/10/15 19:09:32 by gjupy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	init_philos(t_info *info)
 	{
 		info->philos[i].philo_id = i + 1;
 		info->philos[i].info = info;
-		info->philos[i].last_meal = 0;
+		// info->philos[i].last_meal = 0;
 		init_forks(&info->philos[i], i);
 	}
 }

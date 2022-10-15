@@ -6,7 +6,7 @@
 /*   By: gjupy <gjupy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 15:29:42 by gjupy             #+#    #+#             */
-/*   Updated: 2022/08/31 15:48:14 by gjupy            ###   ########.fr       */
+/*   Updated: 2022/10/15 19:28:29 by gjupy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,41 +25,69 @@
 // 	return (false);
 // }
 
-bool	check_death(t_info *info)
+bool	check_death_state(t_info *info)
 {
-	int	i;
-
-	i = -1;
-	while (++i < info->nbr_of_philos)
+	pthread_mutex_lock(info->death_lock);
+	if (info->died == true)
 	{
-		pthread_mutex_lock(info->time_lock);
-		if ((info->philos[i].last_meal + info->time_to_die <= get_time()) && info->philos[i].state != EATING)
-		{
-			pthread_mutex_unlock(info->time_lock);
-			pthread_mutex_lock(info->death_lock);
-			info->died = true;
-			pthread_mutex_unlock(info->death_lock);
-			// sleep  a little
-			print_died(&info->philos[i]);
-			return (true);
-		}
-		pthread_mutex_unlock(info->time_lock);
+		pthread_mutex_unlock(info->death_lock);
+		return (true);
 	}
+	pthread_mutex_unlock(info->death_lock);
 	return (false);
 }
 
-void	death_checker(t_info *info)
-{
-	size_t	start_time;
+// timestamp() - philo->last_meal >= data()->time_to_die
 
-	start_time = get_time();
-	while(start_time + info->time_to_die > get_time());
-	while (true)
+bool	check_death(t_philos *philo)
+{
+	pthread_mutex_lock(philo->info->time_lock);
+	if ((philo->info->died == false && philo->last_meal + philo->info->time_to_die <= get_time()))
 	{
-		if (check_death(info) == true)
-			break ;
+		pthread_mutex_lock(philo->info->death_lock);
+		philo->info->died = true;
+		pthread_mutex_unlock(philo->info->death_lock);
+		print_died(philo);
+		pthread_mutex_unlock(philo->info->time_lock);
+		return (true);
 	}
+	pthread_mutex_unlock(philo->info->time_lock);
+	return (false);
 }
+
+
+// bool	check_death(t_info *info)
+// {
+// 	int	i;
+
+// 	i = -1;
+// 	while (++i < info->nbr_of_philos)
+// 	{
+// 		pthread_mutex_lock(info->time_lock);
+// 		if ((info->philos[i].last_meal + info->time_to_die <= get_time()) && info->philos[i].state != EATING)
+// 		{
+// 			pthread_mutex_lock(info->death_lock);
+// 			info->died = true;
+// 			pthread_mutex_unlock(info->death_lock);
+// 			// sleep  a little
+// 			print_died(&info->philos[i]);
+// 			pthread_mutex_unlock(info->time_lock);
+// 			return (true);
+// 		}
+// 		pthread_mutex_unlock(info->time_lock);
+// 	}
+// 	return (false);
+// }
+
+// void	death_checker(t_info *info)
+// {
+// 	ft_sleep(info->time_to_die);
+// 	while (true)
+// 	{
+// 		if (check_death(info) == true)
+// 			break ;
+// 	}
+// }
 
 // /**
 //  * @brief  sets death bool and prints message

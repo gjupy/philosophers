@@ -6,7 +6,7 @@
 /*   By: gjupy <gjupy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 11:07:49 by gjupy             #+#    #+#             */
-/*   Updated: 2022/08/31 12:19:35 by gjupy            ###   ########.fr       */
+/*   Updated: 2022/10/15 17:29:58 by gjupy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,10 @@ size_t	get_time(void)
 	return ((current_time.tv_sec * 1000) + (current_time.tv_usec / 1000));
 }
 
-bool	check_death_state(t_info *info)
+void	ft_sleep(size_t time)
 {
-	pthread_mutex_lock(info->death_lock);
-	if (info->died == true)
-	{
-		pthread_mutex_unlock(info->death_lock);
-		return (true);
-	}
-	pthread_mutex_unlock(info->death_lock);
-	return (false);
+	size_t	start_time;
+
+	start_time = get_time();
+	while(start_time + time > get_time());
 }

@@ -6,7 +6,7 @@
 /*   By: gjupy <gjupy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 21:57:07 by gjupy             #+#    #+#             */
-/*   Updated: 2022/08/31 15:19:10 by gjupy            ###   ########.fr       */
+/*   Updated: 2022/10/15 19:19:30 by gjupy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ typedef struct s_philos
 	size_t			start_time;
 	t_state			state;
 	struct s_info	*info;
-	// struct s_info	*info;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
 	pthread_t		t_id;
@@ -77,6 +76,7 @@ size_t	get_time(void);
 
 void	philo_sleep(t_philos *philo);
 void	philo_eat(t_philos *philo);
+void	philo_think(t_philos *philo);
 
 void	print_state(t_philos *philo);
 void	print_fork(t_philos *philo);
@@ -86,7 +86,10 @@ void	death_checker(t_info *info);
 
 void	free_all(t_info *info);
 
-bool	check_death(t_info *info);
+// bool	check_death(t_info *info);
+bool	check_death(t_philos *philo);
 bool	check_death_state(t_info *info);
+
+void	ft_sleep(size_t time);
 
 #endif
