@@ -6,7 +6,7 @@
 #    By: gjupy <gjupy@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/24 15:39:40 by gjupy             #+#    #+#              #
-#    Updated: 2022/08/30 15:50:46 by gjupy            ###   ########.fr        #
+#    Updated: 2022/10/17 12:11:08 by gjupy            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ SRCS  = ./srcs/main.c \
 		./srcs/actions.c \
 		./srcs/free.c \
 		./srcs/utils.c \
-		./srcs/death_checker.c
+		./srcs/checker.c
 
 OBJS = $(SRCS:c=o)
 

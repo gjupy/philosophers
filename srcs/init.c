@@ -6,16 +6,44 @@
 /*   By: gjupy <gjupy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 16:07:24 by gjupy             #+#    #+#             */
-/*   Updated: 2022/10/15 19:09:32 by gjupy            ###   ########.fr       */
+/*   Updated: 2022/10/18 20:43:56 by gjupy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
+// void	init_info(char **argv, t_info *info)
+// {
+// 	int		i;
+// 	int		j;
+// 	char	**s;
+
+// 	i = 0;
+// 	while (argv[++i])
+// 	{
+// 		s = ft_split(argv[i], ' ');
+// 		if (s == NULL)
+// 			malloc_err();
+// 		j = -1;
+// 		while (s[++j])
+// 		{
+// 			if (i == 1)
+// 		 		info->nbr_of_philos = ft_atoi_long(s[j]);
+// 			else if (i == 2)
+// 				info->time_to_die = ft_atoi_long(s[j]);
+// 			else if (i == 3)
+// 				info->time_to_eat = ft_atoi_long(s[j]);
+// 			else if (i == 4)
+// 				info->time_to_sleep = ft_atoi_long(s[j]);
+// 			free(s[j]);
+// 		}
+// 		free(s);
+// 	}
+// }
+
 void	init_info(char **argv, t_info *info)
 {
 	int		i;
-	int		j;
 	char	**s;
 
 	i = 0;
@@ -24,21 +52,21 @@ void	init_info(char **argv, t_info *info)
 		s = ft_split(argv[i], ' ');
 		if (s == NULL)
 			malloc_err();
-		j = -1;
-		while (s[++j])
-		{
-			if (i == 1)
-		 		info->nbr_of_philos = ft_atoi_long(s[j]);
-			else if (i == 2)
-				info->time_to_die = ft_atoi_long(s[j]);
-			else if (i == 3)
-				info->time_to_eat = ft_atoi_long(s[j]);
-			else if (i == 4)
-				info->time_to_sleep = ft_atoi_long(s[j]);
-			free(s[j]);
-		}
-		free(s);
+		if (s[1] != NULL) // if more than one argument
+			err();
+		if (i == 1)
+		 	info->nbr_of_philos = ft_atoi_long(s[0]);
+		else if (i == 2)
+			info->time_to_die = ft_atoi_long(s[0]);
+		else if (i == 3)
+			info->time_to_eat = ft_atoi_long(s[0]);
+		else if (i == 4)
+			info->time_to_sleep = ft_atoi_long(s[0]);
+		else if (i == 5)
+			info->nbr_of_meals = ft_atoi_long(s[0]);
+		free(s[0]);
 	}
+	free(s);
 }
 
 void	init_mutex(t_info *info)
@@ -66,7 +94,15 @@ void	init_forks(t_philos *philo, int i)
 	pthread_mutex_init(philo->l_fork, NULL);
 	pthread_mutex_init(philo->r_fork, NULL);
 	philo->r_fork = &philo->info->forks[i];
+	// printf("r fork: %d ", i);
 	philo->l_fork = &philo->info->forks[(i + 1) % philo->info->nbr_of_philos];
+	// printf("l fork: %d\n", (i + 1) % philo->info->nbr_of_philos);
+	philo->r_fork_free = malloc(sizeof(bool));
+	philo->l_fork_free = malloc(sizeof(bool));
+	if (philo->l_fork_free == NULL || philo->r_fork_free == NULL)
+		malloc_err();
+	philo->r_fork_free = &philo->info->fork_available[i];
+	philo->l_fork_free = &philo->info->fork_available[(i + 1) % philo->info->nbr_of_philos];
 }
 
 void	init_philos(t_info *info)
@@ -76,18 +112,27 @@ void	init_philos(t_info *info)
 	i = -1;
 	while (++i < info->nbr_of_philos)
 	{
+		// printf("philo nbr: %d ", i);
 		info->philos[i].philo_id = i + 1;
 		info->philos[i].info = info;
-		// info->philos[i].last_meal = 0;
+		info->philos[i].meals_eaten = 0;
 		init_forks(&info->philos[i], i);
 	}
 }
 
 void	init(char **argv, t_info *info)
 {
-	init_info(argv, info);
+	int	i;
+
 	info->died = false;
-	pthread_mutex_init(info->forks, NULL);
+	info->nbr_of_meals = -1;
+	init_info(argv, info);
+	i = -1;
+	while (++i < info->nbr_of_philos)
+	{
+		pthread_mutex_init(&info->forks[i], NULL);
+		info->fork_available[i] = true;
+	}
 	init_mutex(info);
 	init_philos(info);
 	// int i = -1;

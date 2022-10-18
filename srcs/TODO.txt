@@ -1,0 +1,7 @@
+*** TO DO ***
+
+--> remove exit functions. errors must be returned to the main functions
+--> use ft_sleep
+--> bei ./philo 5 300 100 100 stirbt keiner in meinem Programm. Anscheinend sollte es aber
+--> leaks
+	-> mutexes

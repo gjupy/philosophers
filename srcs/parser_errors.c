@@ -6,7 +6,7 @@
 /*   By: gjupy <gjupy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 15:29:36 by gjupy             #+#    #+#             */
-/*   Updated: 2022/08/22 16:02:33 by gjupy            ###   ########.fr       */
+/*   Updated: 2022/10/16 15:28:35 by gjupy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	parser_input_errors(int argc, char **argv)
 	int		j;
 
 	i = 0;
-	if (argc != 5)
+	if (argc != 5 && argc != 6)
 		err();
 	while (argv[++i])
 	{

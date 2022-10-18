@@ -6,7 +6,7 @@
 /*   By: gjupy <gjupy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 15:40:54 by gjupy             #+#    #+#             */
-/*   Updated: 2022/10/15 19:27:26 by gjupy            ###   ########.fr       */
+/*   Updated: 2022/10/18 20:45:10 by gjupy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,26 +33,22 @@ void	start_routine(t_philos *philo)
 	philo->info->start = get_time();
 	philo->last_meal = get_time();
 	if (philo->philo_id % 2 == 0)
-		while (philo->info->start + philo->info->time_to_eat >= get_time());
-	while (philo->info->died == false)
+		philo_sleep(philo);
+	while (philo->info->died == false && check_all_full(philo->info) == false)
 	{
 		if (check_death(philo) == false && philo->info->died == false)
 		{
-			if (philo->state == RUNNING || philo->state == THINKING)
-				philo_eat(philo);
-			else if (philo->state == EATING)
-				philo_sleep(philo);
-			else if (philo->state == SLEEPING)
-				philo_think(philo);
+			if (philo->state != FINISHED)
+			{
+				if (philo->state == RUNNING || philo->state == THINKING)
+					philo_eat(philo);
+				else if (philo->state == EATING)
+					philo_sleep(philo);
+				else if (philo->state == SLEEPING)
+					philo_think(philo);
+			}
 		}
 	}
-	// 	if (philo->info->died == false && check_death(philo) == false)
-	// 		philo_eat(philo);
-	// 	if (philo->info->died == false && check_death(philo) == false)
-	// 		philo_think(philo);
-	// 	if (philo->info->died == false && check_death(philo) == false)
-	// 		philo_sleep(philo);
-	// }
 }
 
 void	*routine(void *arg)
@@ -77,6 +73,8 @@ void	start_threads(t_info *info)
 			err();
 	}
 	info->wait = false;
+	// ft_sleep(info->time_to_die - (info->time_to_die / 4));
+	// check_death_eating(info);
 	// death_checker(info);
 	i = -1;
 	while (++i < info->nbr_of_philos)

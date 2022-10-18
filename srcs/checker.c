@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   death_checker.c                                    :+:      :+:    :+:   */
+/*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gjupy <gjupy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 15:29:42 by gjupy             #+#    #+#             */
-/*   Updated: 2022/10/15 19:28:29 by gjupy            ###   ########.fr       */
+/*   Updated: 2022/10/18 22:00:32 by gjupy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,14 @@ bool	check_death_state(t_info *info)
 	return (false);
 }
 
-// timestamp() - philo->last_meal >= data()->time_to_die
-
 bool	check_death(t_philos *philo)
 {
 	pthread_mutex_lock(philo->info->time_lock);
-	if ((philo->info->died == false && philo->last_meal + philo->info->time_to_die <= get_time()))
+	if (philo->last_meal + philo->info->time_to_die <= get_time() && philo->info->died == false)
 	{
-		pthread_mutex_lock(philo->info->death_lock);
+		// pthread_mutex_lock(philo->info->death_lock);
 		philo->info->died = true;
-		pthread_mutex_unlock(philo->info->death_lock);
+		// pthread_mutex_unlock(philo->info->death_lock);
 		print_died(philo);
 		pthread_mutex_unlock(philo->info->time_lock);
 		return (true);
@@ -55,7 +53,50 @@ bool	check_death(t_philos *philo)
 	return (false);
 }
 
+void	check_death_eating(t_info *info)
+{
+	int	i;
 
+	i = -1;
+	while (true)
+	{
+		while (++i < info->nbr_of_philos)
+		{
+			if (info->philos[i].forks_taken == false && info->philos[i].state == PICKING_FORK)
+			{
+				if (check_death(&info->philos[i]) == true)
+					return ;
+			}
+		}
+	}
+}
+
+// void	check_death_eating(t_philos *philo)
+// {
+// 	int	i;
+
+// 	while (philo->info->died == false && philo->forks_taken == false && philo->state == PICKING_FORK)
+// 			check_death(philo);
+// }
+
+void	check_philo_full(t_philos *philo)
+{
+	if (philo->meals_eaten == philo->info->nbr_of_meals)
+		philo->state = FINISHED;
+}
+
+bool	check_all_full(t_info *info)
+{
+	int	i;
+
+	i = -1;
+	while (++i < info->nbr_of_philos)
+	{
+		if (info->philos[i].state != FINISHED)
+			return (false);
+	}
+	return (true);
+}
 // bool	check_death(t_info *info)
 // {
 // 	int	i;
