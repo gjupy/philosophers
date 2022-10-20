@@ -6,7 +6,7 @@
 /*   By: gjupy <gjupy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 15:40:54 by gjupy             #+#    #+#             */
-/*   Updated: 2022/10/18 20:45:10 by gjupy            ###   ########.fr       */
+/*   Updated: 2022/10/20 13:41:30 by gjupy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,53 @@
 // 	}
 // }
 
+// void	start_routine(t_philos *philo)
+// {
+// 	pthread_mutex_lock(philo->info->time_lock);
+// 	if (philo->info->start == 0)
+// 		philo->info->start = get_time();
+// 	pthread_mutex_unlock(philo->info->time_lock);
+// 	philo->last_meal = get_time();
+// 	if (philo->philo_id % 2 == 0)
+// 	{
+// 		philo_think(philo);
+// 		ft_sleep(philo->info->time_to_eat);
+// 	}
+// 	pthread_mutex_lock(philo->info->death_lock);
+// 	while (philo->info->died == false && check_death_2(philo) == false 
+// 			&& check_all_full(philo->info) == false)
+// 	{
+// 		pthread_mutex_unlock(philo->info->death_lock);
+// 		// if (check_death(philo) == false)
+// 		// {
+// 			// pthread_mutex_lock(philo->info->death_lock);
+// 			// if (philo->info->died == false)
+// 			// {
+// 				// pthread_mutex_unlock(philo->info->death_lock);
+// 				if (philo->state != FINISHED)
+// 				{
+// 					if (philo->state == RUNNING || philo->state == THINKING)
+// 						philo_eat(philo);
+// 					else if (philo->state == EATING)
+// 						philo_sleep(philo);
+// 					else if (philo->state == SLEEPING)
+// 						philo_think(philo);
+// 				// }
+// 			// pthread_mutex_unlock(philo->info->death_lock);
+// 		}
+// 		pthread_mutex_lock(philo->info->death_lock);
+// 	}
+// 	pthread_mutex_unlock(philo->info->death_lock);
+// }
+
 void	start_routine(t_philos *philo)
 {
-	philo->info->start = get_time();
 	philo->last_meal = get_time();
 	if (philo->philo_id % 2 == 0)
-		philo_sleep(philo);
+	{
+		philo_think(philo);
+		ft_sleep(philo->info->time_to_eat);
+	}
 	while (philo->info->died == false && check_all_full(philo->info) == false)
 	{
 		if (check_death(philo) == false && philo->info->died == false)
@@ -48,6 +89,7 @@ void	start_routine(t_philos *philo)
 					philo_think(philo);
 			}
 		}
+		usleep(50);
 	}
 }
 
@@ -56,8 +98,13 @@ void	*routine(void *arg)
 	t_philos		*philo;
 
 	philo = (t_philos *)arg;
-	while (philo->info->wait == true); // warten, sodass alle zusammen anfangen
-	philo->state = RUNNING;
+	while (philo->info->wait == true) // warten, sodass alle zusammen anfangen
+		usleep(50);
+	pthread_mutex_lock(philo->info->time_lock);
+	if (philo->info->start == 0)
+		philo->info->start = get_time();
+	pthread_mutex_unlock(philo->info->time_lock);
+	philo->state = RUNNING; 
 	start_routine(philo);
 	return (NULL);
 }

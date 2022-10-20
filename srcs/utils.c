@@ -6,7 +6,7 @@
 /*   By: gjupy <gjupy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 11:07:49 by gjupy             #+#    #+#             */
-/*   Updated: 2022/10/18 20:52:31 by gjupy            ###   ########.fr       */
+/*   Updated: 2022/10/19 21:37:41 by gjupy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,28 @@ time_t	get_time(void)
 	return (ms);
 }
 
-void	ft_sleep(time_t val)
+void    ft_sleep(long long ms)
 {
-	time_t	start_time;
+    long long   stop;
 
-	start_time = get_time();
-	while(start_time + val > get_time());
+    stop = get_time() + ms;
+    if (ms > 6)
+    {
+        usleep((ms - 6) * 1000);
+        while (stop > get_time());
+    }
+    else
+    {
+        while (stop > get_time())
+            usleep(50);
+    }
 }
+
+// void	ft_sleep(time_t val)
+// {
+// 	time_t	target;
+
+// 	target = get_time() + val;
+// 	while (get_time() < target)
+// 		usleep(50);
+// }

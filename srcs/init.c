@@ -6,7 +6,7 @@
 /*   By: gjupy <gjupy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 16:07:24 by gjupy             #+#    #+#             */
-/*   Updated: 2022/10/18 20:43:56 by gjupy            ###   ########.fr       */
+/*   Updated: 2022/10/19 22:19:34 by gjupy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,12 @@ void	init_mutex(t_info *info)
 	info->print_lock = malloc(sizeof(pthread_mutex_t));
 	info->death_lock = malloc(sizeof(pthread_mutex_t));
 	info->time_lock = malloc(sizeof(pthread_mutex_t));
-	info->eat_lock = malloc(sizeof(pthread_mutex_t));
 	if (info->print_lock == NULL || info->death_lock == NULL
-		|| info->time_lock == NULL || info->eat_lock == NULL)
+		|| info->time_lock == NULL)
 		malloc_err();
 	if (pthread_mutex_init(info->print_lock, NULL) != 0 ||
 	pthread_mutex_init(info->death_lock, NULL) != 0 ||
-	pthread_mutex_init(info->time_lock, NULL) != 0 ||
-	pthread_mutex_init(info->eat_lock, NULL) != 0)
+	pthread_mutex_init(info->time_lock, NULL) != 0)
 		err();
 }
 
@@ -93,14 +91,18 @@ void	init_forks(t_philos *philo, int i)
 		malloc_err();
 	pthread_mutex_init(philo->l_fork, NULL);
 	pthread_mutex_init(philo->r_fork, NULL);
+	philo->info->free_fork = malloc(sizeof(pthread_mutex_t));
+	if (philo->info->free_fork == NULL)
+		malloc_err();
+	pthread_mutex_init(philo->info->free_fork, NULL);
 	philo->r_fork = &philo->info->forks[i];
 	// printf("r fork: %d ", i);
 	philo->l_fork = &philo->info->forks[(i + 1) % philo->info->nbr_of_philos];
 	// printf("l fork: %d\n", (i + 1) % philo->info->nbr_of_philos);
-	philo->r_fork_free = malloc(sizeof(bool));
-	philo->l_fork_free = malloc(sizeof(bool));
-	if (philo->l_fork_free == NULL || philo->r_fork_free == NULL)
-		malloc_err();
+	// philo->r_fork_free = malloc(sizeof(bool));
+	// philo->l_fork_free = malloc(sizeof(bool));
+	// if (philo->l_fork_free == NULL || philo->r_fork_free == NULL)
+	// 	malloc_err();
 	philo->r_fork_free = &philo->info->fork_available[i];
 	philo->l_fork_free = &philo->info->fork_available[(i + 1) % philo->info->nbr_of_philos];
 }
@@ -126,6 +128,7 @@ void	init(char **argv, t_info *info)
 
 	info->died = false;
 	info->nbr_of_meals = -1;
+	info->start = 0;
 	init_info(argv, info);
 	i = -1;
 	while (++i < info->nbr_of_philos)
