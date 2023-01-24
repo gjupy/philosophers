@@ -1,7 +1,0 @@
-*** TO DO ***
-
---> remove exit functions. errors must be returned to the main functions
---> use ft_sleep
---> ab 94 philos wird immernoch nach dem sterben geprinted
---> leaks
-	-> mutexes

@@ -6,7 +6,7 @@
 /*   By: gjupy <gjupy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 15:29:36 by gjupy             #+#    #+#             */
-/*   Updated: 2022/10/16 15:28:35 by gjupy            ###   ########.fr       */
+/*   Updated: 2022/10/20 22:00:12 by gjupy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,29 +42,30 @@ bool	str_of_spaces(char **argv)
 	return (false);
 }
 
-void	parser_input_errors(int argc, char **argv)
+int	parser_input_errors(int argc, char **argv)
 {
 	int		i;
 	int		j;
 
 	i = 0;
 	if (argc != 5 && argc != 6)
-		err();
+		return (err());
 	while (argv[++i])
 	{
 		if (argv[i][0] == '\0')
-			err();
+			return (err());
 		j = 0;
 		while (argv[i][j])
 		{
 			if (ft_isdigit(argv[i][j]) == 0)
 			{
 				if (is_space(argv[i][j]) == false)
-					err();
+					return (err());
 			}
 			j++;
 		}
 	}
 	if (str_of_spaces(argv))
-		err();
+		return (err());
+	return (EXIT_SUCCESS);
 }

@@ -6,13 +6,13 @@
 #    By: gjupy <gjupy@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/24 15:39:40 by gjupy             #+#    #+#              #
-#    Updated: 2022/10/20 13:45:05 by gjupy            ###   ########.fr        #
+#    Updated: 2022/10/20 21:33:22 by gjupy            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME  = philo
 CC    = gcc
-FLAGS = -Wall -Werror -Wextra -pthread
+FLAGS = -Wall -Werror -Wextra -pthread -g
 LIBFT = ./libs/libft/libft.a
 SRCS  = ./srcs/main.c \
 		./srcs/parser_errors.c \
@@ -23,6 +23,8 @@ SRCS  = ./srcs/main.c \
 		./srcs/actions.c \
 		./srcs/free.c \
 		./srcs/utils.c \
+		./srcs/take_forks.c \
+		./srcs/init_2.c \
 		./srcs/checker.c
 
 OBJS = $(SRCS:c=o)
@@ -35,9 +37,11 @@ $(NAME): $(OBJS)
 
 clean:
 	rm -f $(OBJS) $(OBJS_B)
+	$(MAKE) -C libs/libft clean
 
 fclean: clean
 	rm -f $(NAME)
+	$(MAKE) -C libs/libft fclean
 
 re: fclean $(NAME)
 

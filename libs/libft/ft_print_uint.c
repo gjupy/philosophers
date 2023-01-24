@@ -6,13 +6,13 @@
 /*   By: gjupy <gjupy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 19:46:59 by gjupy             #+#    #+#             */
-/*   Updated: 2022/06/03 16:05:46 by gjupy            ###   ########.fr       */
+/*   Updated: 2022/10/20 20:35:22 by gjupy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	ft_put_uint_fd(unsigned int n, int fd)
+static void	ft_put_uint_fd(long n, int fd)
 {
 	char	c;
 

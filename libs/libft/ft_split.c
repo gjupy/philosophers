@@ -6,98 +6,11 @@
 /*   By: gjupy <gjupy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 15:58:07 by gjupy             #+#    #+#             */
-/*   Updated: 2022/08/11 13:05:39 by gjupy            ###   ########.fr       */
+/*   Updated: 2022/10/20 21:18:06 by gjupy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
-
-static int	count_words(const char *s, char c)
-{
-	int	words;
-	int	i;
-	int	len;
-
-	i = -1;
-	words = 0;
-	len = ft_strlen(s);
-	while (++i < len)
-	{
-		if (s[i] != c)
-		{
-			while (s[i] != '\0' && s[i] != c)
-				i++;
-			if (s[i] == c || s[i] == '\0')
-				words++;
-		}
-	}
-	return (words);
-}
-
-static int	ft_free(char ***ss, size_t j)
-{
-	if (((*ss)[j]) == NULL)
-	{
-		while (j-- >= 0)
-			free((*ss)[j]);
-		free(*ss);
-		return (0);
-	}
-	return (1);
-}
-
-static char	**ft_gen(const char *s, char **ss, char c)
-{
-	int	i;
-	int	j;
-	int	start;
-	int	len;
-
-	i = -1;
-	j = 0;
-	len = ft_strlen(s);
-	while (++i < len)
-	{
-		start = i;
-		if (s[i] != c)
-		{
-			while (s[i] != '\0' && s[i] != c)
-				i++;
-			if (s[i] == c || s[i] == '\0')
-			{
-				ss[j++] = ft_substr(s, start, i - start);
-				if (!ft_free(&ss, j - 1))
-					return (NULL);
-			}
-		}
-	}
-	ss[j] = NULL;
-	return (ss);
-}
-
-static char	**nulloc(char **ss)
-{
-	ss = malloc(sizeof(char *));
-	ss[0] = NULL;
-	return (ss);
-}
-
-char	**ft_split(char const *str, char c)
-{
-	char	**ss;
-
-	if (str == NULL)
-		return (NULL);
-	ss = NULL;
-	if (*str == '\0')
-		return (nulloc(ss));
-	ss = malloc(sizeof(char *) * (count_words(str, c) + 1));
-	if (!ss)
-		return (NULL);
-	ss = ft_gen(str, ss, c);
-	return (ss);
-}
 
 // static int	ft_count_words(char const *s, char c)
 // {
@@ -184,3 +97,89 @@ char	**ft_split(char const *str, char c)
 // 	ss = ft_splitting(ss, s, c);
 // 	return (ss);
 // }
+
+static int	count_words(const char *s, char c)
+{
+	int	words;
+	int	i;
+	int	len;
+
+	i = -1;
+	words = 0;
+	len = ft_strlen(s);
+	while (++i < len)
+	{
+		if (s[i] != c)
+		{
+			while (s[i] != '\0' && s[i] != c)
+				i++;
+			if (s[i] == c || s[i] == '\0')
+				words++;
+		}
+	}
+	return (words);
+}
+
+static int	ft_free(char ***ss, long j)
+{
+	if (((*ss)[j]) == NULL)
+	{
+		while (j-- >= 0)
+			free((*ss)[j]);
+		free(*ss);
+		return (0);
+	}
+	return (1);
+}
+
+static char	**ft_gen(const char *s, char **ss, char c)
+{
+	int	i;
+	int	j;
+	int	start;
+	int	len;
+
+	i = -1;
+	j = 0;
+	len = ft_strlen(s);
+	while (++i < len)
+	{
+		start = i;
+		if (s[i] != c)
+		{
+			while (s[i] != '\0' && s[i] != c)
+				i++;
+			if (s[i] == c || s[i] == '\0')
+			{
+				ss[j++] = ft_substr(s, start, i - start);
+				if (!ft_free(&ss, j - 1))
+					return (NULL);
+			}
+		}
+	}
+	ss[j] = NULL;
+	return (ss);
+}
+
+static char	**nulloc(char **ss)
+{
+	ss = malloc(sizeof(char *));
+	ss[0] = NULL;
+	return (ss);
+}
+
+char	**ft_split(char const *str, char c)
+{
+	char	**ss;
+
+	if (str == NULL)
+		return (NULL);
+	ss = NULL;
+	if (*str == '\0')
+		return (nulloc(ss));
+	ss = malloc(sizeof(char *) * (count_words(str, c) + 1));
+	if (!ss)
+		return (NULL);
+	ss = ft_gen(str, ss, c);
+	return (ss);
+}

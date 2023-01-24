@@ -6,13 +6,13 @@
 /*   By: gjupy <gjupy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 20:31:18 by gjupy             #+#    #+#             */
-/*   Updated: 2022/06/24 22:56:09 by gjupy            ###   ########.fr       */
+/*   Updated: 2022/10/20 20:34:27 by gjupy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	isspace(char c)
+static int	is_space(char c)
 {
 	return (c == 9 || c == 32 || c == '\t' || c == '\n'
 		|| c == '\r' || c == '\v' || c == '\f');
@@ -25,7 +25,7 @@ long	ft_atoi_long(const char *str)
 	int		sign;
 
 	sign = 1;
-	while (isspace(*str))
+	while (is_space(*str))
 		str++;
 	if (*str == '-')
 	{
