@@ -1,5 +1,4 @@
 # philosophers
-In this project, I learned the basics of threading a process: how to create threads and work with mutexes.
 
 ### Usage
 To run the simulation a few variables are needed:
